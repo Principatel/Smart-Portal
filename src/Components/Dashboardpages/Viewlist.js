@@ -8,7 +8,6 @@ function Viewlist() {
   const [filteredTransactions, setFilteredTransactions] = useState([]);
 
   const handleSearch = () => {
-    // Filter transactions based on the search query
     const filtered = transactions.filter((transaction) =>
       transaction.receiverAddress
         .toLowerCase()
@@ -21,7 +20,6 @@ function Viewlist() {
     setSearchQuery(e.target.value);
   };
 
-  // Dummy transaction data
   const transactions = [
     {
       receiverAddress: "0x5A819d4b53C1f7E0FBBbf48936E92D0a55D073C2",
@@ -58,11 +56,8 @@ function Viewlist() {
       chainId: "6",
       hash: "https://example.com/hash12",
     },
-
-    // Add more transactions as needed
   ];
 
-  // Automatically trigger the search when searchQuery changes
   useEffect(() => {
     handleSearch();
   }, [searchQuery]);
@@ -95,7 +90,7 @@ function Viewlist() {
                 <th>Token Amount</th>
                 <th>Token Symbol</th>
                 <th>Chain ID</th>
-                <th>Hash</th> {/* Add the new "hash" column */}
+                <th>Hash</th>
               </tr>
             </thead>
             <tbody style={{ maxHeight: "300px", overflowY: "auto" }}>

@@ -1,5 +1,4 @@
 .div-to-view-all-transaction {
-  /* border: 1px solid black; */
   margin-top: -15px;
   padding: 20px;
 }
@@ -19,7 +18,7 @@
 
 .search-icon {
   position: absolute;
-  left: 10px; /* Adjust this value to control the space for the icon from the left */
+  left: 10px;
   top: 50%;
   transform: translateY(-50%);
 }
