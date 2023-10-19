@@ -35,6 +35,7 @@ function Createlist() {
           value={formData.receiverAddress}
           placeholder="Enter Receiver Address"
           onChange={handleInputChange}
+          required
         />
         <input
           className="each-input-of-create-list"
@@ -43,6 +44,7 @@ function Createlist() {
           value={formData.tokenAmount}
           placeholder="Enter Token Amount"
           onChange={handleInputChange}
+          required
         />
         <input
           className="each-input-of-create-list"
@@ -51,6 +53,7 @@ function Createlist() {
           value={formData.tokenSymbol}
           placeholder="Enter Token Symbol"
           onChange={handleInputChange}
+          required
         />
         <input
           className="each-input-of-create-list"
@@ -59,6 +62,7 @@ function Createlist() {
           value={formData.chainName}
           placeholder="Enter Chain name"
           onChange={handleInputChange}
+          required
         />
         <button className="button-to-add-form-data" onClick={handleAddClick}>
           Add to List
@@ -93,7 +97,7 @@ function Createlist() {
             <button className="send-button">Begin Payment</button>
           </div>
         ) : (
-          <h3>Your Transactions list will be display here!!</h3>
+          <h3>Your Transactions list will be listed here!!</h3>
         )}
       </div>
     </div>
