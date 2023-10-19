@@ -1,0 +1,32 @@
+.div-to-view-all-transaction{
+    /* border: 1px solid black; */
+    margin-top: -15px;
+    padding: 20px;
+}
+
+.search-bar{
+    display: flex;
+    width: 100%;
+}
+
+.search-input-container {
+    position: relative;
+    display: flex;
+    width: 100%;
+    align-items: center;
+  }
+  
+  .search-icon {
+    position: absolute;
+    left: 10px; /* Adjust this value to control the space for the icon from the left */
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  
+  .search-bar-view {
+    border-radius: 20px;
+    width: 100%;
+    padding: 10px;
+    padding-left: 40px; 
+  }
+  

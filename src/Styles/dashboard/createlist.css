@@ -1,0 +1,137 @@
+.user-form-for-list {
+  border: 1px solid rgb(19, 193, 193);
+  padding: 5px 0px;
+}
+
+.div-to-add-the-tx {
+  border: 1px solid red;
+  margin: 10px 0px;
+  justify-content: center;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.each-input-of-create-list {
+  /* margin: 0px 20px; */
+  padding: 10px;
+  margin: 5px;
+  border-radius: 5px;
+  background: transparent;
+  border: 1px solid white;
+  color: white;
+}
+
+/* Add these styles to your createlist.css or style tag */
+.user-form-for-list {
+  border: 1px solid rgb(27, 207, 220);
+  padding: 25px 0px;
+  border-radius: 15px;
+}
+
+.button-to-add-form-data:hover {
+  border: 1px solid rgb(21, 160, 207);
+  box-shadow: rgba(12, 172, 216, 0.553) 0px 5px 15px;
+  background-color: rgba(18, 224, 235, 0.629);
+  color: white;
+}
+.button-to-add-form-data {
+  padding: 10px 25px;
+  background-color: transparent;
+  color: white;
+  border: 1px solid rgb(14, 163, 200);
+  border-radius: 15px;
+  margin-left: 20px;
+}
+
+.div-to-add-the-tx {
+  box-shadow: rgba(23, 161, 192, 0.16) 0px 3px 6px,
+    rgba(15, 131, 139, 0.23) 0px 3px 6px;
+  border: 1px solid rgb(22, 179, 227);
+  margin: 10px 0px;
+  justify-content: center;
+  display: flex;
+  border-radius: 10px;
+  flex-direction: column;
+}
+
+.scrollable-table {
+  max-height: 250px; /* Adjust the height as needed */
+  overflow: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  /* border: 1px solid #ddd; */
+}
+
+table th {
+  background-color: #0feeee7a;
+  /* border: 1px solid #ddd; */
+  padding: 10px;
+}
+
+table th:first-child {
+  border-radius: 30px 0px 0px 30px;
+}
+
+table th:last-child {
+  border-radius: 0px 30px 30px 0px;
+}
+
+table td {
+  text-align: center;
+  /* border: 1px solid #ddd; */
+  padding: 10px;
+}
+
+table tbody tr:nth-child(even) {
+  background-color: transparent;
+}
+
+.scrollable-table {
+  max-height: 300px;
+  overflow: auto;
+}
+
+.scrollable-table::-webkit-scrollbar {
+  width: 10px;
+}
+
+.scrollable-table::-webkit-scrollbar-thumb {
+  background: #0feeee7a; /* Blue color for the scrollbar thumb */
+  border-radius: 5px; /* Round corners for the scrollbar thumb */
+}
+
+.scrollable-table::-webkit-scrollbar-thumb:hover {
+  background: #0feeee; /* Change color on hover */
+}
+
+.scrollable-table-container {
+  max-height: 280px; /* Adjust the height as needed */
+  overflow: auto;
+}
+
+.send-button:hover {
+  background-color: rgba(20, 187, 216, 0.304);
+  box-shadow: rgba(16, 162, 206, 0.12) 0px 2px 4px 0px,
+    rgba(12, 156, 218, 0.32) 0px 2px 16px 0px;
+}
+.send-button {
+  padding: 10px;
+  /* background-color: rgba(0, 191, 255, 0.306); */
+  background-color: transparent;
+  font-family: Almarai;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 37px;
+  letter-spacing: 0.085em;
+  text-align: center;
+  margin: 0px 400px;
+  margin-bottom: 20px;
+  color: white;
+  border: 1px solid rgb(10, 186, 217);
+  border-radius: 25px;
+  /* margin-top: 10px; */
+}

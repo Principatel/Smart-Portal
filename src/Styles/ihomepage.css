@@ -1,0 +1,64 @@
+.main-div-ihomepage {
+  /* border: 1px solid black; */
+  padding: 150px 0px 100px 0px;
+  font-family: Almarai;
+  font-size: 18px;
+  font-weight: 300;
+  line-height: 44px;
+  letter-spacing: 0.055em;
+  text-align: center;
+  color: white;
+  z-index: -10;
+}
+
+.get-started-button {
+  margin-top: 50px;
+  width: 353px;
+  height: 73px;
+  padding: 21px, 71px, 21px, 71px;
+  border-radius: 39px;
+  border: 3px;
+  background: linear-gradient(
+    93.58deg,
+    #1bff7670 2.58%,
+    #00ffff59 49.63%,
+    #00ffff 96.68%
+  );
+  font-family: Almarai;
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 31px;
+  letter-spacing: 0.055em;
+  text-align: center;
+  color: white;
+}
+
+.ihomepage-title-i h1 {
+  overflow: hidden; /* Ensures the content is not revealed until the animation */
+  border-right: 0.15em solid orange; /* The typwriter cursor */
+  white-space: nowrap; /* Keeps the content on a single line */
+  margin: 0 auto; /* Gives that scrolling effect as the typing happens */
+  letter-spacing: 0.15em; /* Adjust as needed */
+  animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
+}
+
+/* The typing effect */
+@keyframes typing {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+/* The typewriter cursor effect */
+@keyframes blink-caret {
+  from,
+  to {
+    border-color: transparent;
+  }
+  50% {
+    border-color: orange;
+  }
+}
