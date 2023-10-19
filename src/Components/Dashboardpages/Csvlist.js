@@ -11,7 +11,6 @@ function Csvlist() {
       return [];
     }
 
-    // Split the first row to get header names
     const headers = rows[0].split(",").map((header) => header.trim());
 
     const data = [];
@@ -19,7 +18,6 @@ function Csvlist() {
       const row = rows[i].split(",").map((item) => item.trim());
 
       if (row.length === headers.length) {
-        // Create an object using header names as keys
         const rowData = {};
         headers.forEach((header, index) => {
           rowData[header] = row[index];
@@ -47,36 +45,50 @@ function Csvlist() {
     }
   };
 
+  const isCsvDataEmpty = csvData.length === 0;
+
   return (
     <div>
       <div className="main-div-for-upload-csv-file">
         <div className="input-div-for-csv">
           <label>Upload File</label> &nbsp; &nbsp;
-          <input type="file" accept=".csv" onChange={handleFileUpload} />
+          <input
+            className="input-csv-feild"
+            type="file"
+            accept=".csv"
+            onChange={handleFileUpload}
+          />
         </div>
       </div>
       <div className="display-csvfile-here">
-        {csvData.length > 0 && (
-          <table>
-            <thead>
-              <tr>
-                <th>Receiver address</th>
-                <th>Token amount</th>
-                <th>Token symbol</th>
-                <th>Chain id</th>
-              </tr>
-            </thead>
-            <tbody>
-              {csvData.map((row, index) => (
-                <tr key={index}>
-                  <td>{row["Receiver address"]}</td>
-                  <td>{row["Token amount"]}</td>
-                  <td>{row["Token symbol"]}</td>
-                  <td>{row["Chain id"]}</td>
+        {isCsvDataEmpty ? (
+          <p>Upload your CSV File</p>
+        ) : (
+          <div className="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Receiver address</th>
+                  <th>Token amount</th>
+                  <th>Token symbol</th>
+                  <th>Chain id</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {csvData.map((row, index) => (
+                  <tr key={index}>
+                    <td>{row["Receiver address"]}</td>
+                    <td>{row["Token amount"]}</td>
+                    <td>{row["Token symbol"]}</td>
+                    <td>{row["Chain id"]}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+        {isCsvDataEmpty ? null : (
+          <button className="button-to-submit-csv">Begin Payment</button>
         )}
       </div>
     </div>

@@ -1,4 +1,4 @@
-.rectangle-box-for-4-cards{
+.rectangle-box-for-4-cards {
   display: flex;
   gap: 30px;
   justify-content: center;
@@ -10,12 +10,52 @@
   /* filter: blur(20px); */
 }
 
-.card{
-  box-shadow: rgba(81, 92, 191, 0.658) 0px 5px 15px;
+.card {
+  /* box-shadow: rgba(81, 92, 191, 0.658) 0px 5px 15px; */
   z-index: 100;
-  border: 1px solid white;
+  /* border: 1px solid white; */
   padding: 20px;
   border-radius: 20px;
-  background-color: rgba(46, 106, 158, 0.368);
+  background-color: rgba(46, 106, 158, 0.231);
   color: white;
+}
+
+#a {
+  border: 1px solid rgba(8, 244, 165, 0.447);
+}
+
+#a:hover {
+  scale: 1.1;
+  /* box-shadow: rgba(10, 226, 179, 0.692) 0px 5px 15px; */
+  box-shadow: rgba(6, 198, 166, 0.514) 0px 0px 16px;
+}
+
+#d {
+  border: 1px solid rgba(14, 14, 231, 0.447);
+}
+
+#d:hover {
+  scale: 1.1;
+  /* box-shadow: rgba(10, 226, 179, 0.692) 0px 5px 15px; */
+  box-shadow: rgba(12, 68, 222, 0.514) 0px 0px 16px;
+}
+
+#c {
+  border: 1px solid rgba(231, 14, 79, 0.447);
+}
+
+#c:hover {
+  scale: 1.1;
+  /* box-shadow: rgba(10, 226, 179, 0.692) 0px 5px 15px; */
+  box-shadow: rgba(231, 7, 100, 0.514) 0px 0px 16px;
+}
+
+#b {
+  border: 1px solid rgba(72, 231, 9, 0.447);
+}
+
+#b:hover {
+  scale: 1.1;
+  /* box-shadow: rgba(10, 226, 179, 0.692) 0px 5px 15px; */
+  box-shadow: rgba(134, 231, 7, 0.514) 0px 0px 16px;
 }

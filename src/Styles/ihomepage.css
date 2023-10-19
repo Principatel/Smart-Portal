@@ -1,6 +1,6 @@
 .main-div-ihomepage {
   /* border: 1px solid black; */
-  padding: 150px 0px 100px 0px;
+  padding: 234px 0px 45px 0px;
   font-family: Almarai;
   font-size: 18px;
   font-weight: 300;
@@ -11,26 +11,37 @@
   z-index: -10;
 }
 
+.get-started-button:hover {
+  scale: 1.05;
+  /* background-image: linear-gradient(135deg, #c2ffd8 10%, #465efb 100%); */
+  background-image: linear-gradient(
+    to right,
+    #b8cbb8 0%,
+    #b8cbb8 0%,
+    #b465da 0%,
+    #cf6cc9 33%,
+    #ee609c 66%,
+    #ee609c 100%
+  );
+  color: white;
+}
 .get-started-button {
+  cursor: grab;
   margin-top: 50px;
   width: 353px;
   height: 73px;
   padding: 21px, 71px, 21px, 71px;
   border-radius: 39px;
   border: 3px;
-  background: linear-gradient(
-    93.58deg,
-    #1bff7670 2.58%,
-    #00ffff59 49.63%,
-    #00ffff 96.68%
-  );
+  background: rgb(16, 22, 102);
+  background-image: linear-gradient(135deg, #ee9ae5 10%, #5961f9 100%);
   font-family: Almarai;
-  font-size: 30px;
-  font-weight: 700;
+  font-size: 33px;
+  font-weight: 900;
   line-height: 31px;
   letter-spacing: 0.055em;
   text-align: center;
-  color: white;
+  color: rgb(254, 254, 255);
 }
 
 .ihomepage-title-i h1 {

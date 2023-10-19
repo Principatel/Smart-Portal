@@ -65,31 +65,35 @@ function Createlist() {
         </button>
       </div>
       <div className="div-to-add-the-tx">
-        <h1>Your Transaction Lineup</h1>
-        <div className="scrollable-table-container">
-          <table>
-            <thead>
-              <tr>
-                <th>Receive Address</th>
-                <th>Token Amount</th>
-                <th>Token Symbol</th>
-                <th>Chain Name</th>
-              </tr>
-            </thead>
-            <tbody>
-              {listData.map((data, index) => (
-                <tr key={index}>
-                  <td>{data.receiverAddress}</td>
-                  <td>{data.tokenAmount}</td>
-                  <td>{data.tokenSymbol}</td>
-                  <td>{data.chainName}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        {listData.length > 0 && (
-          <button className="send-button">Begin Payment</button>
+        {listData.length > 0 ? (
+          <div>
+            <h1>Your Transaction Lineup</h1>
+            <div className="scrollable-table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Receive Address</th>
+                    <th>Token Amount</th>
+                    <th>Token Symbol</th>
+                    <th>Chain Name</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {listData.map((data, index) => (
+                    <tr key={index}>
+                      <td>{data.receiverAddress}</td>
+                      <td>{data.tokenAmount}</td>
+                      <td>{data.tokenSymbol}</td>
+                      <td>{data.chainName}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <button className="send-button">Begin Payment</button>
+          </div>
+        ) : (
+          <h3>Your Transactions list will be display here!!</h3>
         )}
       </div>
     </div>

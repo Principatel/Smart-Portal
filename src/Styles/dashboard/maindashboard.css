@@ -42,12 +42,12 @@
 }
 
 #csv {
-  border: 1px solid rgb(238, 17, 190);
+  border: 1px solid rgb(205, 17, 238);
   box-shadow: rgba(185, 22, 142, 0.2) 0px 8px 24px;
 }
 
 #csv:hover {
-  background-color: rgba(197, 91, 178, 0.55);
+  background-color: rgba(213, 20, 239, 0.55);
   border: 1px solid rgb(108, 17, 95);
   /* color: black; */
   box-shadow: rgba(110, 171, 232, 0.2) 0px 8px 24px;
