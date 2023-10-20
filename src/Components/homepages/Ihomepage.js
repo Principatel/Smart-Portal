@@ -1,4 +1,7 @@
 import React from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"; // Import FontAwesome
+import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+
 import { useNavigate } from "react-router-dom";
 import "../../Styles/ihomepage.css";
 
@@ -20,7 +23,8 @@ function Ihomepage() {
       </div>
       <div>
         <button className="get-started-button" onClick={handleGetStartedClick}>
-          Get Started
+          Get Started {/* Add the icon */}
+          <FontAwesomeIcon icon={faArrowRight} />
         </button>
       </div>
     </div>
