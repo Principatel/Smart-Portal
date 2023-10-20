@@ -53,6 +53,7 @@
   display: flex;
   border-radius: 10px;
   flex-direction: column;
+  padding: 0px 10px;
 }
 
 .scrollable-table {
@@ -129,7 +130,7 @@ table tbody tr:nth-child(even) {
   letter-spacing: 0.085em;
   text-align: center;
   margin: 0px 400px;
-  margin-bottom: 20px;
+  /* margin-bottom: 20px; */
   color: white;
   border: 1px solid rgb(10, 186, 217);
   border-radius: 25px;

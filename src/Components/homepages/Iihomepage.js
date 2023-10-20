@@ -12,7 +12,7 @@ function Iihomepage() {
         <div className="rectangle-box-for-4-cards">
           <div id="a" className="card">
             <img className="iconnn" src={gif} alt="non" />
-            <h2 className="iconn">Connect Wallet</h2>
+            <h3 className="iconn">Connect Your Wallet</h3>
             <p>Link your Wallet</p>
           </div>
           <div id="b" className="card">

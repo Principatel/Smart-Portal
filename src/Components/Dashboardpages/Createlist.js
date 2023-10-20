@@ -16,6 +16,16 @@ function Createlist() {
   };
 
   const handleAddClick = () => {
+    if (
+      formData.receiverAddress.trim() === "" ||
+      formData.tokenAmount.trim() === "" ||
+      formData.tokenSymbol.trim() === "" ||
+      formData.chainName.trim() === ""
+    ) {
+      alert("Please fill in all fields before adding to the list.");
+      return;
+    }
+
     setListData([...listData, formData]);
     setFormData({
       receiverAddress: "",
@@ -35,7 +45,6 @@ function Createlist() {
           value={formData.receiverAddress}
           placeholder="Enter Receiver Address"
           onChange={handleInputChange}
-          required
         />
         <input
           className="each-input-of-create-list"
@@ -44,7 +53,6 @@ function Createlist() {
           value={formData.tokenAmount}
           placeholder="Enter Token Amount"
           onChange={handleInputChange}
-          required
         />
         <input
           className="each-input-of-create-list"
@@ -53,7 +61,6 @@ function Createlist() {
           value={formData.tokenSymbol}
           placeholder="Enter Token Symbol"
           onChange={handleInputChange}
-          required
         />
         <input
           className="each-input-of-create-list"
@@ -62,7 +69,6 @@ function Createlist() {
           value={formData.chainName}
           placeholder="Enter Chain name"
           onChange={handleInputChange}
-          required
         />
         <button className="button-to-add-form-data" onClick={handleAddClick}>
           Add to List
