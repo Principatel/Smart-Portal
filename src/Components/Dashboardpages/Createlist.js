@@ -2,10 +2,15 @@ import React, { useState } from "react";
 import "../../Styles/dashboard/createlist.css";
 import { crossSendInstance } from "../../Helpers/ContractInstance";
 import { getDestChainAddress } from "../../Helpers/DestChainAddresses";
+import { getTokenBalance } from "../../Helpers/TokenBalance";
+import { getGasFees } from "../../Helpers/getGasEstimation";
+import { approveToken } from "../../Helpers/ApproveToken";
+
 import { ethers } from "ethers";
-import axios from "axios";
+import { useAccount, useSigner } from "wagmi";
 
 function Createlist() {
+  const { address, isConnected } = useAccount();
   const [listData, setListData] = useState([]);
   const [formData, setFormData] = useState({
     receiverAddress: "",
@@ -42,7 +47,6 @@ function Createlist() {
   async function processListData(listData) {
     const groupedData = {};
 
-    // Create an array of promises for fetching destination addresses and gas fees
     const promises = listData.map(async (item) => {
       const { chainName, receiverAddress, tokenAmount, tokenSymbol } = item;
 
@@ -70,7 +74,7 @@ function Createlist() {
 
       group.detContractAddress = destChainAddress;
       group.tokenSymbol = tokenSymbol;
-      group.gasFees = gasFees;
+      group.gasFees = gasFees * 1000000000;
     });
 
     // Wait for all promises to complete before returning the result
@@ -80,57 +84,68 @@ function Createlist() {
     return groupedDataArray;
   }
 
+  const tokenBalance = async (totalTokenAmount) => {
+    console.log(address);
+    const balance = await getTokenBalance(address);
+    const userTokenBalance = Math.floor(
+      (Number(balance._hex) / 1e6).toFixed(6),
+      2
+    );
+    console.log("user balance:", userTokenBalance);
+    console.log("token to transfer:", totalTokenAmount);
+    const val = userTokenBalance - totalTokenAmount;
+    if (userTokenBalance < totalTokenAmount) {
+      alert(
+        `Token exceeded.You don't have enough Token, you aUSDC balance is ${userTokenBalance} aUSDC and your total transfer amount is ${totalTokenAmount} aUSDC`
+      );
+      return false;
+    } else {
+      return true;
+    }
+  };
+
   const executeTransaction = async () => {
     console.log(listData);
 
     processListData(listData)
       .then(async (groupedData) => {
         console.log(groupedData);
+
+        //get total gas fees
         const totalGasFees = groupedData.reduce((sum, item) => {
           return sum + (item.gasFees || 0); // Ensure gasFees is a number, add it to the sum
         }, 0);
         console.log(totalGasFees);
-        // const con = await crossSendInstance();
-        // const txsendPayment = await con.sendPayment(groupedData);
 
-        // const receipt = await txsendPayment.wait();
-        // console.log("Transaction receipt:", receipt);
+        //get total token amount
+        const totalTokenAmount = groupedData.reduce((sum, group) => {
+          const groupTotal = group.amounts.reduce((acc, amount) => {
+            // Convert BigNumber to decimal with six decimal places
+            const decimalAmount = Number(amount.toString()) / 1e6;
+            return acc + decimalAmount;
+          }, 0);
+          return sum + groupTotal;
+        }, 0);
+
+        const procced = await tokenBalance(totalTokenAmount);
+
+        if (procced) {
+          console.log("Total Amounts:", totalTokenAmount);
+          console.log(ethers.utils.parseUnits(totalTokenAmount.toString(), 6));
+
+          await approveToken(totalTokenAmount.toString());
+          // const con = await crossSendInstance();
+          // const txsendPayment = await con.sendPayment(groupedData, {
+          //   value: totalGasFees,
+          // });
+
+          // const receipt = await txsendPayment.wait();
+          // console.log("Transaction receipt:", receipt);
+        }
       })
       .catch((error) => {
         console.error(error);
       });
-  };
-
-  const getGasFees = async (destinationChain) => {
-    return new Promise(async (resolve, reject) => {
-      // Define the parameters
-      const parameters = {
-        method: "estimateGasFee",
-        sourceChain: "scroll",
-        destinationChain: destinationChain,
-        gasLimit: "700000",
-        gasMultiplier: "1.1",
-        minGasPrice: "0",
-        sourceTokenSymbol: "aUSDC",
-      };
-
-      // Define the API endpoint
-      const apiUrl = "https://testnet.api.gmp.axelarscan.io";
-
-      try {
-        // Make the POST request
-        const response = await axios.post(apiUrl, parameters);
-
-        // Handle the response data here
-        const gasFees = response.data; // Assuming the response contains gas fee data
-
-        resolve(gasFees);
-      } catch (error) {
-        // Handle any errors
-        console.error("Error:", error);
-        reject(error);
-      }
-    });
   };
 
   return (
@@ -218,7 +233,6 @@ function Createlist() {
             >
               Begin Payment
             </button>
-            <button onClick={() => getGasFees()}>Gasssss</button>
           </div>
         ) : (
           <h3>Your Transactions list will be listed here!!</h3>
