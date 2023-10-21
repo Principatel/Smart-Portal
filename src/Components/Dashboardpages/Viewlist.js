@@ -8,16 +8,6 @@ import { decode } from "../../Helpers/DecodePayload";
 function Viewlist() {
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredTransactions, setFilteredTransactions] = useState([]);
-
-  const data = {
-    receiverAddress: "",
-    tokenAmount: "",
-    TokenSymbol: "",
-    ChainName: "",
-    Status: "",
-    TransactionHash: "",
-  };
-
   const handleSearch = () => {
     const filtered = transactions.filter((transaction) =>
       transaction.receiverAddress
@@ -32,15 +22,40 @@ function Viewlist() {
   };
 
   const fetchTransaction = async () => {
-    // const transactionDetails = await getSentTransaction();
     const [allTransactions] = await Promise.all([getSentTransaction()]);
     console.log(allTransactions.data[0]["call"]["returnValues"]["payload"]);
-    const de = await decode(
-      allTransactions.data[0]["call"]["returnValues"]["payload"]
-    );
-    // for (let i = 0; i < allTransactions.data.length; i++) {
-    //   data.receiverAddress = allTransactions.data[i].call;
-    // }
+    const details = [];
+
+    for (let i = 0; i < allTransactions.data.length; i++) {
+      const rec = await decode(
+        allTransactions.data[i]["call"]["returnValues"]["payload"]
+      );
+
+      const totalSeconds = allTransactions.data[i]["time_spent"]["total"];
+
+      const minutes = Math.floor(totalSeconds / 60);
+      const seconds = totalSeconds % 60;
+      const newTransaction = {
+        ReceiverAddress: rec.receivers,
+        TokenAmount: rec.amounts,
+        TokenSymbol: allTransactions.data[i]["symbol"],
+        ChainName:
+          allTransactions.data[i]["call"]["returnValues"]["destinationChain"],
+        Status: allTransactions.data[i]["status"],
+        TransactionHash:
+          allTransactions.data[i]["call"]["transactionHash"] +
+          ":" +
+          allTransactions.data[i]["call"]["logIndex"],
+        TimeTaken: `${minutes} minutes ${seconds} seconds`,
+        TotaTokenAmount: allTransactions.data[i]["amount"],
+        TimeExecuted:
+          allTransactions.data[i]["call"]["returnValues"]["block_timestamp"],
+      };
+
+      details.push(newTransaction);
+    }
+
+    console.log(details);
   };
 
   const transactions = [
