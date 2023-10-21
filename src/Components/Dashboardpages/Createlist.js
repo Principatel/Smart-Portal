@@ -12,10 +12,10 @@ import { useAccount, useSigner } from "wagmi";
 function Createlist() {
   const { address, isConnected } = useAccount();
   const [listData, setListData] = useState([]);
+  const [tokenSymbolFinal, setTokenSymbol] = useState("aUSDC");
   const [formData, setFormData] = useState({
     receiverAddress: "",
     tokenAmount: "",
-    tokenSymbol: "",
     chainName: "Polygon",
   });
 
@@ -28,7 +28,6 @@ function Createlist() {
     if (
       formData.receiverAddress.trim() === "" ||
       formData.tokenAmount.trim() === "" ||
-      formData.tokenSymbol.trim() === "" ||
       formData.chainName.trim() === ""
     ) {
       alert("Please fill in all fields before adding to the list.");
@@ -39,16 +38,25 @@ function Createlist() {
     setFormData({
       receiverAddress: "",
       tokenAmount: "",
-      tokenSymbol: "",
       chainName: formData.chainName,
     });
   };
 
+  const handleDeleteRow = (index) => {
+    const updatedList = [...listData]; // Create a copy of the list
+    updatedList.splice(index, 1); // Remove the item at the specified index
+    setListData(updatedList); // Update the state with the modified list
+  };
+
   async function processListData(listData) {
+    if (tokenSymbolFinal === "") {
+      alert("Please select a token");
+    }
+    console.log(tokenSymbolFinal);
     const groupedData = {};
 
     const promises = listData.map(async (item) => {
-      const { chainName, receiverAddress, tokenAmount, tokenSymbol } = item;
+      const { chainName, receiverAddress, tokenAmount } = item;
 
       if (!groupedData[chainName]) {
         groupedData[chainName] = {
@@ -56,7 +64,7 @@ function Createlist() {
           amounts: [],
           destChain: "",
           detContractAddress: "",
-          tokenSymbol: [],
+          tokenSymbol: "",
           gasFees: 0,
         };
       }
@@ -73,7 +81,7 @@ function Createlist() {
       ]);
 
       group.detContractAddress = destChainAddress;
-      group.tokenSymbol = tokenSymbol;
+      group.tokenSymbol = tokenSymbolFinal;
       group.gasFees = gasFees * 1000000000;
     });
 
@@ -133,7 +141,7 @@ function Createlist() {
           console.log("Total Amounts:", totalTokenAmount);
           console.log(ethers.utils.parseUnits(totalTokenAmount.toString(), 6));
 
-          await approveToken(totalTokenAmount.toString());
+          // await approveToken(totalTokenAmount.toString());
           // const con = await crossSendInstance();
           // const txsendPayment = await con.sendPayment(groupedData, {
           //   value: totalGasFees,
@@ -153,15 +161,17 @@ function Createlist() {
       Select Token
       <select
         className="each-input-of-create-list"
-        name="tokenName"
-        value="aUSDC"
-        onChange={handleInputChange}
+        name="tokenSymbol"
+        value={tokenSymbolFinal}
+        onChange={(e) => {
+          setTokenSymbol(e.target.value);
+        }}
       >
-        <option value="Polygon">Polygon</option>
-        <option value="ethereum-2">Ethereum</option>
-        <option value="Avalanche">Avalanche</option>
-        <option value="Moonbeam">Moonbeam</option>
-        <option value="arbitrum">Arbitrum</option>
+        <option value="aUSDC">aUSDC</option>
+        <option value="axlWETH">axlWETH</option>
+        <option value="wAXL">wAXL</option>
+        <option value="WMATIC">WMATIC</option>
+        <option value="WDEV">WDEV</option>
       </select>
       <div className="user-form-for-list">
         <input
@@ -224,6 +234,7 @@ function Createlist() {
                     <th>Token Amount</th>
                     <th>Token Symbol</th>
                     <th>Chain Name</th>
+                    <th>remove</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -231,8 +242,13 @@ function Createlist() {
                     <tr key={index}>
                       <td>{data.receiverAddress}</td>
                       <td>{data.tokenAmount}</td>
-                      <td>{data.tokenSymbol}</td>
+                      <td>{tokenSymbolFinal}</td>
                       <td>{data.chainName}</td>
+                      <td>
+                        <button onClick={() => handleDeleteRow(index)}>
+                          Delete
+                        </button>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
