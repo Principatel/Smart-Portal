@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import "../../Styles/dashboard/createlist.css";
-
+import { crossSendInstance } from "../../Helpers/ContractInstance";
+import { getDestChainAddress } from "../../Helpers/DestChainAddresses";
 function Createlist() {
   const [listData, setListData] = useState([]);
   const [formData, setFormData] = useState({
     receiverAddress: "",
     tokenAmount: "",
     tokenSymbol: "",
-    chainName: "",
+    chainName: "Polygon",
   });
 
   const handleInputChange = (e) => {
@@ -31,8 +32,55 @@ function Createlist() {
       receiverAddress: "",
       tokenAmount: "",
       tokenSymbol: "",
-      chainName: "",
+      chainName: formData.chainName,
     });
+  };
+
+  async function processListData(listData) {
+    const groupedData = {};
+
+    for (const item of listData) {
+      const { chainName, receiverAddress, tokenAmount, tokenSymbol } = item;
+
+      if (!groupedData[chainName]) {
+        groupedData[chainName] = {
+          receivers: [],
+          amounts: [],
+          destChain: "",
+          detContractAddress: "",
+          tokenSymbol: [],
+        };
+      }
+
+      const group = groupedData[chainName];
+      group.receivers.push(receiverAddress);
+      group.amounts.push(tokenAmount);
+      group.destChain = chainName;
+      group.detContractAddress = await getDestChainAddress(chainName);
+      group.tokenSymbol = tokenSymbol;
+    }
+
+    const groupedDataArray = Object.values(groupedData);
+    return groupedDataArray;
+  }
+
+  const executeTransaction = async () => {
+    console.log(listData);
+
+    processListData(listData)
+      .then((groupedData) => {
+        console.log(groupedData);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+
+    // const groupedDataArray = Object.values(groupedData);
+
+    // const chainAddress = await getDestChainAddress(listData[0].chainName);
+    // console.log("address", chainAddress);
+    // const con = await crossSendInstance();
+    // const txsendPayment = await con.sendPayment();
   };
 
   return (
@@ -62,14 +110,26 @@ function Createlist() {
           placeholder="Enter Token Symbol"
           onChange={handleInputChange}
         />
-        <input
+        {/* <input
           className="each-input-of-create-list"
           type="text"
           name="chainName"
           value={formData.chainName}
           placeholder="Enter Chain name"
           onChange={handleInputChange}
-        />
+        /> */}
+        <select
+          className="each-input-of-create-list"
+          name="chainName"
+          value={formData.chainName}
+          onChange={handleInputChange}
+        >
+          <option value="Polygon">Polygon</option>
+          <option value="ethereum-2">Ethereum</option>
+          <option value="Avalanche">Avalanche</option>
+          <option value="Moonbeam">Moonbeam</option>
+          <option value="arbitrum">Arbitrum</option>
+        </select>
         <button className="button-to-add-form-data" onClick={handleAddClick}>
           Add to List
         </button>
@@ -100,7 +160,14 @@ function Createlist() {
                 </tbody>
               </table>
             </div>
-            <button className="send-button">Begin Payment</button>
+            <button
+              className="send-button"
+              onClick={() => {
+                executeTransaction();
+              }}
+            >
+              Begin Payment
+            </button>
           </div>
         ) : (
           <h3>Your Transactions list will be listed here!!</h3>
