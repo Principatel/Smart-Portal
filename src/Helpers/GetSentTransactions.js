@@ -1,16 +1,13 @@
 import axios from "axios";
 
-export const getGasFees = async (destinationChain) => {
+export const getSentTransaction = async (address) => {
   return new Promise(async (resolve, reject) => {
     // Define the parameters
     const parameters = {
-      method: "estimateGasFee",
-      sourceChain: "scroll",
-      destinationChain: destinationChain,
-      gasLimit: "700000",
-      gasMultiplier: "1.1",
-      minGasPrice: "0",
-      sourceTokenSymbol: "aUSDC",
+      method: "searchGMP",
+      size: 5,
+      senderAddress: "0xe57f4c84539a6414C4Cf48f135210e01c477EFE0",
+      sourceContractAddress: "0x05c106CaD72b04c09F228286fEd949eC6f9539a7",
     };
 
     // Define the API endpoint

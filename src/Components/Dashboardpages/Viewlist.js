@@ -2,10 +2,21 @@ import React, { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import "../../Styles/dashboard/viewlist.css";
+import { getSentTransaction } from "../../Helpers/GetSentTransactions";
+import { decode } from "../../Helpers/DecodePayload";
 
 function Viewlist() {
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredTransactions, setFilteredTransactions] = useState([]);
+
+  const data = {
+    receiverAddress: "",
+    tokenAmount: "",
+    TokenSymbol: "",
+    ChainName: "",
+    Status: "",
+    TransactionHash: "",
+  };
 
   const handleSearch = () => {
     const filtered = transactions.filter((transaction) =>
@@ -18,6 +29,18 @@ function Viewlist() {
 
   const handleInputChange = (e) => {
     setSearchQuery(e.target.value);
+  };
+
+  const fetchTransaction = async () => {
+    // const transactionDetails = await getSentTransaction();
+    const [allTransactions] = await Promise.all([getSentTransaction()]);
+    console.log(allTransactions.data[0]["call"]["returnValues"]["payload"]);
+    const de = await decode(
+      allTransactions.data[0]["call"]["returnValues"]["payload"]
+    );
+    // for (let i = 0; i < allTransactions.data.length; i++) {
+    //   data.receiverAddress = allTransactions.data[i].call;
+    // }
   };
 
   const transactions = [
@@ -115,6 +138,7 @@ function Viewlist() {
           </table>
         </div>
       </div>
+      <button onClick={() => fetchTransaction()}>get transaction</button>
     </div>
   );
 }
