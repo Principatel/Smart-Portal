@@ -5,6 +5,7 @@ import { getDestChainAddress } from "../../Helpers/DestChainAddresses";
 import { getTokenBalance } from "../../Helpers/TokenBalance";
 import { getGasFees } from "../../Helpers/getGasEstimation";
 import { approveToken } from "../../Helpers/ApproveToken";
+import tokensContractAddress from "../../Helpers/GetTokenContractAddress.json";
 
 import { ethers } from "ethers";
 import { useAccount, useSigner } from "wagmi";
@@ -48,11 +49,11 @@ function Createlist() {
     setListData(updatedList); // Update the state with the modified list
   };
 
+  //standarized the data received from the list for contract call
   async function processListData(listData) {
     if (tokenSymbolFinal === "") {
       alert("Please select a token");
     }
-    console.log(tokenSymbolFinal);
     const groupedData = {};
 
     const promises = listData.map(async (item) => {
@@ -93,15 +94,16 @@ function Createlist() {
   }
 
   const tokenBalance = async (totalTokenAmount) => {
-    console.log(address);
-    const balance = await getTokenBalance(address);
+    const balance = await getTokenBalance(
+      address,
+      tokensContractAddress[tokenSymbolFinal]
+    );
     const userTokenBalance = Math.floor(
       (Number(balance._hex) / 1e6).toFixed(6),
       2
     );
     console.log("user balance:", userTokenBalance);
     console.log("token to transfer:", totalTokenAmount);
-    const val = userTokenBalance - totalTokenAmount;
     if (userTokenBalance < totalTokenAmount) {
       alert(
         `Token exceeded.You don't have enough Token, you aUSDC balance is ${userTokenBalance} aUSDC and your total transfer amount is ${totalTokenAmount} aUSDC`
@@ -112,18 +114,19 @@ function Createlist() {
     }
   };
 
+  // Main function to do the Contract Call
   const executeTransaction = async () => {
-    console.log(listData);
+    console.log("list of data received from the form:", listData);
 
     processListData(listData)
       .then(async (groupedData) => {
-        console.log(groupedData);
+        console.log("Processed data for smart contract:", groupedData);
 
         //get total gas fees
         const totalGasFees = groupedData.reduce((sum, item) => {
-          return sum + (item.gasFees || 0); // Ensure gasFees is a number, add it to the sum
+          return sum + (item.gasFees || 0);
         }, 0);
-        console.log(totalGasFees);
+        console.log("Total gas fees required:", totalGasFees);
 
         //get total token amount
         const totalTokenAmount = groupedData.reduce((sum, group) => {
@@ -138,10 +141,11 @@ function Createlist() {
         const procced = await tokenBalance(totalTokenAmount);
 
         if (procced) {
-          console.log("Total Amounts:", totalTokenAmount);
-          console.log(ethers.utils.parseUnits(totalTokenAmount.toString(), 6));
-
-          // await approveToken(totalTokenAmount.toString());
+          console.log("Proceeding for approval....");
+          await approveToken(
+            totalTokenAmount.toString(),
+            tokensContractAddress[tokenSymbolFinal]
+          );
           // const con = await crossSendInstance();
           // const txsendPayment = await con.sendPayment(groupedData, {
           //   value: totalGasFees,
