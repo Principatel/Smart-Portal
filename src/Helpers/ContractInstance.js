@@ -12,8 +12,12 @@ export const crossSendInstance = async () => {
     if (!provider) {
       console.log("Metamask is not installed, please install!");
     }
-    const con = new ethers.Contract(CROSS_SENDER_ADDRESS, crossSendABI, signer);
-    // console.log(con);
+    const con = new ethers.Contract(
+      CROSS_SENDER_ADDRESS,
+      crossSendABI.abi,
+      signer
+    );
+    console.log(con);
     return con;
   } else {
     console.log("error");

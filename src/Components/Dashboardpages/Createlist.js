@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import "../../Styles/dashboard/createlist.css";
 import { crossSendInstance } from "../../Helpers/ContractInstance";
 import { getDestChainAddress } from "../../Helpers/DestChainAddresses";
+import { ethers } from "ethers";
+import axios from "axios";
+
 function Createlist() {
   const [listData, setListData] = useState([]);
   const [formData, setFormData] = useState({
@@ -39,7 +42,8 @@ function Createlist() {
   async function processListData(listData) {
     const groupedData = {};
 
-    for (const item of listData) {
+    // Create an array of promises for fetching destination addresses and gas fees
+    const promises = listData.map(async (item) => {
       const { chainName, receiverAddress, tokenAmount, tokenSymbol } = item;
 
       if (!groupedData[chainName]) {
@@ -49,16 +53,28 @@ function Createlist() {
           destChain: "",
           detContractAddress: "",
           tokenSymbol: [],
+          gasFees: 0,
         };
       }
 
       const group = groupedData[chainName];
       group.receivers.push(receiverAddress);
-      group.amounts.push(tokenAmount);
+      group.amounts.push(ethers.utils.parseUnits(tokenAmount, 6));
       group.destChain = chainName;
-      group.detContractAddress = await getDestChainAddress(chainName);
+
+      // Use Promise.all to concurrently fetch data for each item
+      const [destChainAddress, gasFees] = await Promise.all([
+        getDestChainAddress(chainName),
+        getGasFees(chainName),
+      ]);
+
+      group.detContractAddress = destChainAddress;
       group.tokenSymbol = tokenSymbol;
-    }
+      group.gasFees = gasFees;
+    });
+
+    // Wait for all promises to complete before returning the result
+    await Promise.all(promises);
 
     const groupedDataArray = Object.values(groupedData);
     return groupedDataArray;
@@ -68,19 +84,53 @@ function Createlist() {
     console.log(listData);
 
     processListData(listData)
-      .then((groupedData) => {
+      .then(async (groupedData) => {
         console.log(groupedData);
+        const totalGasFees = groupedData.reduce((sum, item) => {
+          return sum + (item.gasFees || 0); // Ensure gasFees is a number, add it to the sum
+        }, 0);
+        console.log(totalGasFees);
+        // const con = await crossSendInstance();
+        // const txsendPayment = await con.sendPayment(groupedData);
+
+        // const receipt = await txsendPayment.wait();
+        // console.log("Transaction receipt:", receipt);
       })
       .catch((error) => {
         console.error(error);
       });
+  };
 
-    // const groupedDataArray = Object.values(groupedData);
+  const getGasFees = async (destinationChain) => {
+    return new Promise(async (resolve, reject) => {
+      // Define the parameters
+      const parameters = {
+        method: "estimateGasFee",
+        sourceChain: "scroll",
+        destinationChain: destinationChain,
+        gasLimit: "700000",
+        gasMultiplier: "1.1",
+        minGasPrice: "0",
+        sourceTokenSymbol: "aUSDC",
+      };
 
-    // const chainAddress = await getDestChainAddress(listData[0].chainName);
-    // console.log("address", chainAddress);
-    // const con = await crossSendInstance();
-    // const txsendPayment = await con.sendPayment();
+      // Define the API endpoint
+      const apiUrl = "https://testnet.api.gmp.axelarscan.io";
+
+      try {
+        // Make the POST request
+        const response = await axios.post(apiUrl, parameters);
+
+        // Handle the response data here
+        const gasFees = response.data; // Assuming the response contains gas fee data
+
+        resolve(gasFees);
+      } catch (error) {
+        // Handle any errors
+        console.error("Error:", error);
+        reject(error);
+      }
+    });
   };
 
   return (
@@ -168,6 +218,7 @@ function Createlist() {
             >
               Begin Payment
             </button>
+            <button onClick={() => getGasFees()}>Gasssss</button>
           </div>
         ) : (
           <h3>Your Transactions list will be listed here!!</h3>
