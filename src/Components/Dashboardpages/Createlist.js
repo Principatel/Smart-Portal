@@ -150,6 +150,19 @@ function Createlist() {
 
   return (
     <div>
+      Select Token
+      <select
+        className="each-input-of-create-list"
+        name="tokenName"
+        value="aUSDC"
+        onChange={handleInputChange}
+      >
+        <option value="Polygon">Polygon</option>
+        <option value="ethereum-2">Ethereum</option>
+        <option value="Avalanche">Avalanche</option>
+        <option value="Moonbeam">Moonbeam</option>
+        <option value="arbitrum">Arbitrum</option>
+      </select>
       <div className="user-form-for-list">
         <input
           className="each-input-of-create-list"
@@ -167,14 +180,14 @@ function Createlist() {
           placeholder="Enter Token Amount"
           onChange={handleInputChange}
         />
-        <input
+        {/* <input
           className="each-input-of-create-list"
           type="text"
           name="tokenSymbol"
           value={formData.tokenSymbol}
           placeholder="Enter Token Symbol"
           onChange={handleInputChange}
-        />
+        /> */}
         {/* <input
           className="each-input-of-create-list"
           type="text"
