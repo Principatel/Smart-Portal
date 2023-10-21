@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const getGasFees = async (destinationChain, tokenSymbol) => {
+export const getGasFees = async (destinationChain) => {
   return new Promise(async (resolve, reject) => {
     // Define the parameters
     const parameters = {
@@ -10,7 +10,7 @@ export const getGasFees = async (destinationChain, tokenSymbol) => {
       gasLimit: "700000",
       gasMultiplier: "1.1",
       minGasPrice: "0",
-      sourceTokenSymbol: tokenSymbol,
+      sourceTokenSymbol: "aUSDC",
     };
 
     // Define the API endpoint

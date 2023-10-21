@@ -78,7 +78,7 @@ function Createlist() {
       // Use Promise.all to concurrently fetch data for each item
       const [destChainAddress, gasFees] = await Promise.all([
         getDestChainAddress(chainName),
-        getGasFees(chainName),
+        getGasFees(chainName, tokenSymbolFinal),
       ]);
 
       group.detContractAddress = destChainAddress;
