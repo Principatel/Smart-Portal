@@ -57,7 +57,7 @@ td {
   line-height: 37px;
   letter-spacing: 0.085em;
   text-align: center;
-  width: 100%;
+  width: max-content;
   margin-bottom: 20px;
   color: white;
   border: 1px solid rgb(157, 9, 237);
