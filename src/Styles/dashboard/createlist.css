@@ -136,3 +136,28 @@ table tbody tr:nth-child(even) {
   border-radius: 25px;
   /* margin-top: 10px; */
 }
+
+/* Default styles */
+
+@media (max-width: 768px) {
+  .user-form-for-list {
+    width: 100%;
+  }
+
+  .each-input-of-create-list {
+    width: fit-content; /* Make input fields take full width */
+  }
+
+  .button-to-add-form-data {
+    width: fit-content; /* Make the "Add to List" button take full width */
+  }
+
+  .scrollable-table-container {
+    max-height: 200px; /* Adjust the height as needed for small screens */
+  }
+
+  .send-button {
+    margin: 2px;
+    width: 100%; /* Make the "Begin Payment" button take full width */
+  }
+}

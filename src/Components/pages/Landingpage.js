@@ -9,7 +9,7 @@ function Landingpage() {
     <div>
       <Ihomepage />
       <Iihomepage />
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 }

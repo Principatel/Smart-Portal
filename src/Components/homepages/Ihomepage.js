@@ -1,7 +1,6 @@
 import React from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"; // Import FontAwesome
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
-
 import { useNavigate } from "react-router-dom";
 import "../../Styles/ihomepage.css";
 
@@ -9,7 +8,6 @@ function Ihomepage() {
   const navigate = useNavigate();
 
   const handleGetStartedClick = () => {
-    // Use history.push to navigate to the Maindashboard component
     navigate("/maindashboard");
   };
 
@@ -23,8 +21,7 @@ function Ihomepage() {
       </div>
       <div>
         <button className="get-started-button" onClick={handleGetStartedClick}>
-          Get Started {/* Add the icon */}
-          <FontAwesomeIcon icon={faArrowRight} />
+          Get Started <FontAwesomeIcon icon={faArrowRight} />
         </button>
       </div>
     </div>

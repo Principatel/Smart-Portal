@@ -17,18 +17,17 @@ function Iihomepage() {
           </div>
           <div id="b" className="card">
             <img className="iconnn" src={list} alt="non" />
-
-            <h2 className="iconn">List Transactions</h2>
+            <h3 className="iconn">List Transactions</h3>
             <p>Enter Recipient Details</p>
           </div>
           <div id="c" className="card">
             <img className="iconnn" src={send} alt="non" />
-            <h2 className="iconn">Send Transaction</h2>
-            <p>Initiate the transation</p>
+            <h3 className="iconn">Send Transaction</h3>
+            <p>Initiate the transaction</p>
           </div>
           <div id="d" className="card">
             <img className="iconnn" src={historyview} alt="non" />
-            <h2 className="iconn">View History</h2>
+            <h3 className="iconn">View History</h3>
             <p>Monitor your Transactions</p>
           </div>
         </div>

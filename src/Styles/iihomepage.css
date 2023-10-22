@@ -1,35 +1,51 @@
 .rectangle-box-for-4-cards {
   display: flex;
-  gap: 30px;
+  flex-wrap: wrap; /* Allow cards to wrap to the next line on smaller screens */
   justify-content: center;
-  /* border: 1px solid white; */
-  margin: -5px 200px 50px 200px;
-  padding: 50px 0px;
+  gap: 20px; /* Increase the gap between cards for better spacing on smaller screens */
+  padding: 20px; /* Reduce padding for smaller screens */
   border-radius: 20px;
-  /* border-color: linear-gradient(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%);  */
-  /* filter: blur(20px); */
+  margin: 1px 200px;
 }
 
-.iconnn {
+.card {
+  background-color: rgba(113, 16, 223, 0.161);
+  border-radius: 20px;
   color: white;
-  width: 90px;
-  height: 90px;
+  flex: 1; /* Make cards take up equal width on smaller screens */
+  padding: 5px; /* Adjust padding for smaller screens */
 }
 
 .iconn {
-  margin-top: -5px;
-  margin-bottom: -5px;
-}
-.card {
-  /* box-shadow: rgba(81, 92, 191, 0.658) 0px 5px 15px; */
-  z-index: 100;
-  /* border: 1px solid white; */
-  padding: 20px;
-  border-radius: 20px;
-  background-color: rgba(46, 106, 158, 0.231);
-  color: white;
+  font-size: 1.2rem; /* Reduce the font size for smaller screens */
 }
 
+.iconnn {
+  width: 60px;
+  height: 60px; /* Adjust icon size for smaller screens */
+}
+
+@media (max-width: 768px) {
+  .rectangle-box-for-4-cards {
+    gap: 10px; /* Further increase the gap for smaller screens */
+    margin: 1px 10px;
+  }
+
+  .card {
+    margin: 2px 30px;
+    font-size: 15px;
+    padding: 20px; /* Further reduce padding for smaller screens */
+  }
+
+  .iconn {
+    font-size: 1rem; /* Further reduce font size for even smaller screens */
+  }
+
+  .iconnn {
+    width: 90px;
+    height: 90px; /* Further adjust icon size for smaller screens */
+  }
+}
 #a {
   border: 1px solid rgba(8, 244, 165, 0.447);
 }

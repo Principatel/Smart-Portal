@@ -8,7 +8,7 @@ function Dashboard() {
   return (
     <div className="dividiv">
       <Maindashboard />
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 }

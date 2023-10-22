@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom"; // Import Link from React Router
+import { Link } from "react-router-dom";
 import "../Styles/navbar.css";
 import smartlogo from "../../src/Assets/Smart Portal light.png";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
@@ -9,7 +9,6 @@ function Navbar() {
     <div>
       <div className="div-to-flex-logo-connect-wallet">
         <div>
-          {/* Wrap the logo image in a Link component */}
           <Link to="/">
             <img
               className="smart-logo-portal"

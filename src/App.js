@@ -1,4 +1,4 @@
-import "./App.css";
+import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Navbar from "./Components/Navbar";
 import Landingpage from "./Components/pages/Landingpage";
@@ -10,6 +10,7 @@ import { configureChains, createConfig, WagmiConfig } from "wagmi";
 import { scrollSepolia } from "wagmi/chains";
 import { alchemyProvider } from "wagmi/providers/alchemy";
 import { publicProvider } from "wagmi/providers/public";
+import "./App.css"; // Import your CSS file here
 
 const { chains, publicClient } = configureChains(
   [scrollSepolia],
@@ -34,7 +35,7 @@ function App() {
       <WagmiConfig config={wagmiConfig}>
         <RainbowKitProvider chains={chains}>
           <div className="landingpff">
-            <div class="background">
+            <div className="background">
               <span></span>
               <span></span>
               <span></span>
@@ -54,12 +55,14 @@ function App() {
               <span></span>
               <span></span>
               <span></span>
+
               <Router>
                 <Navbar />
                 <Routes>
                   <Route path="/" element={<Landingpage />} />
                   <Route path="/maindashboard" element={<Maindashboard />} />
                 </Routes>
+                <Footer />
               </Router>
             </div>
           </div>

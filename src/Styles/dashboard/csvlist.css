@@ -1,17 +1,17 @@
+/* Default styles for larger screens */
 .input-div-for-csv {
   border: 1px solid rgb(198, 10, 250);
   border-radius: 10px;
   padding: 20px 0px;
+  text-align: center;
 }
 
 .input-div-for-csv label {
   color: #fff;
-  text-align: center;
   font-family: Be Vietnam Pro;
   font-size: 20px;
-  font-style: normal;
   font-weight: 400;
-  line-height: 154.1%; /* 30.82px */
+  line-height: 154.1%;
   letter-spacing: 1.1px;
 }
 
@@ -19,16 +19,15 @@
   border: 1px solid rgb(180, 8, 242);
   margin-top: 20px;
   border-radius: 20px 20px 10px 10px;
+  text-align: center;
 }
 
 .input-csv-feild {
   color: #fff;
-  text-align: center;
   font-family: Be Vietnam Pro;
   font-size: 20px;
-  font-style: normal;
   font-weight: 400;
-  line-height: 154.1%; /* 30.82px */
+  line-height: 154.1%;
   letter-spacing: 1.1px;
   font-size: 20px;
 }
@@ -39,7 +38,6 @@
 }
 
 table {
-  /* margin: 10px 0px; */
   width: 100%;
   border-collapse: collapse;
 }
@@ -50,25 +48,8 @@ td {
   text-align: left;
 }
 
-.table-wrapper::-webkit-scrollbar {
-  width: 8px;
-}
-
-.table-wrapper::-webkit-scrollbar-thumb {
-  background-color: rgba(199, 21, 154, 0.425);
-}
-
-.table-wrapper::-webkit-scrollbar-track {
-  background-color: #f1f1f1;
-}
-
-.table-wrapper::-webkit-scrollbar-button {
-  display: none;
-}
-
 .button-to-submit-csv {
   padding: 10px;
-  /* background-color: rgba(0, 191, 255, 0.306); */
   background-color: transparent;
   font-family: Almarai;
   font-size: 20px;
@@ -76,7 +57,7 @@ td {
   line-height: 37px;
   letter-spacing: 0.085em;
   text-align: center;
-  margin: 0px 400px;
+  width: 100%;
   margin-bottom: 20px;
   color: white;
   border: 1px solid rgb(157, 9, 237);
@@ -85,6 +66,38 @@ td {
 
 .button-to-submit-csv:hover {
   box-shadow: rgba(110, 171, 232, 0.2) 0px 8px 24px;
-  scale: 1.01;
+  transform: scale(1.01);
   background-color: rgba(206, 16, 231, 0.494);
+  cursor: grab;
+}
+
+@media (max-width: 768px) {
+  .input-div-for-csv {
+    padding: 10px 0px;
+  }
+
+  .input-div-for-csv label {
+    font-size: 16px;
+  }
+
+  .display-csvfile-here {
+    margin-top: 10px;
+  }
+
+  .input-csv-feild {
+    font-size: 16px;
+  }
+
+  .table-wrapper {
+    max-height: 300px;
+  }
+
+  table {
+    font-size: 10px;
+  }
+
+  .button-to-submit-csv {
+    font-size: 18px;
+    margin: 0;
+  }
 }
