@@ -4,11 +4,14 @@ import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import "../../Styles/dashboard/viewlist.css";
 import { getSentTransaction } from "../../Helpers/GetSentTransactions";
 import { decode } from "../../Helpers/DecodePayload";
+import Modal from "react-modal";
 
 function Viewlist() {
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredTransactions, setFilteredTransactions] = useState([]);
   const [transactionDetails, setTransactionDetails] = useState([]);
+  const [errorModalIsOpen, setErrorModalIsOpen] = useState(false);
+  const [data, setData] = useState();
 
   const handleSearch = () => {
     const filtered = transactionDetails.filter(
@@ -27,10 +30,17 @@ function Viewlist() {
     setSearchQuery(e.target.value);
   };
 
-  const handleExpandClick = (index) => {
-    const updatedTransactions = [...filteredTransactions];
-    updatedTransactions[index].expanded = !updatedTransactions[index].expanded;
-    setFilteredTransactions(updatedTransactions);
+  const handleExpandClick = (receiverAddress, amounts) => {
+    let data = [];
+    for (let i = 0; i < receiverAddress.length; i++) {
+      data[i] = {
+        receiverAddress: receiverAddress[i],
+        amount: parseInt(amounts[i] / 1000000),
+      };
+    }
+    console.log(data);
+    setData(data);
+    setErrorModalIsOpen(true);
   };
 
   const fetchTransaction = async () => {
@@ -113,60 +123,75 @@ function Viewlist() {
               <th>Time Taken</th>
               <th>Current Status</th>
               <th>Hash</th>
-              <th>View Details</th>
+              <th>View Recipients</th>
             </tr>
           </thead>
           <tbody style={{ maxHeight: "300px", overflowY: "auto" }}>
             {filteredTransactions.map((transaction, index) => (
-              <tr key={index}>
-                <td>{transaction.ChainName}</td>
-                <td>{transaction.TokenSymbol}</td>
-                <td>{transaction.TotaTokenAmount}</td>
-                <td>{transaction.TimeExecuted}</td>
-                <td>{transaction.TimeTaken}</td>
-                <td>{transaction.Status}</td>
-                <td>
-                  <a
-                    href={
-                      "https://testnet.axelarscan.io/gmp/" +
-                      transaction.TransactionHash
-                    }
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {"Click Me!!"}
-                  </a>
-                </td>
-                <td>
-                  <button onClick={() => handleExpandClick(index)}>
-                    {transaction.expanded ? "Hide Details" : "Show Details"}
-                  </button>
-                  {transaction.expanded && (
-                    <div>
-                      <p>Receiver Address:</p>
-                      <ul>
-                        {transaction.ReceiverAddress.map(
-                          (receiver, receiverIndex) => (
-                            <li key={receiverIndex}>{receiver}</li>
-                          )
-                        )}
-                      </ul>
-                      <p>Token Amount:</p>
-                      <ul>
-                        {transaction.TokenAmount.map((amount, amountIndex) => (
-                          <li key={amountIndex}>
-                            {(amount / 1000000).toString()}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-                </td>
-              </tr>
+              <>
+                <tr key={index}>
+                  <td>{transaction.ChainName}</td>
+                  <td>{transaction.TokenSymbol}</td>
+                  <td>{transaction.TotaTokenAmount}</td>
+                  <td>{transaction.TimeExecuted}</td>
+                  <td>{transaction.TimeTaken}</td>
+                  <td>{transaction.Status}</td>
+                  <td>
+                    <a
+                      href={
+                        "https://testnet.axelarscan.io/gmp/" +
+                        transaction.TransactionHash
+                      }
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {"Click Me!!"}
+                    </a>
+                  </td>
+                  <td>
+                    <button
+                      onClick={() =>
+                        handleExpandClick(
+                          transaction.ReceiverAddress,
+                          transaction.TokenAmount
+                        )
+                      }
+                    >
+                      {transaction.expanded ? "Hide Details" : "Show Details"}
+                    </button>
+                  </td>
+                </tr>
+                {transaction.expanded && <></>}
+              </>
             ))}
           </tbody>
         </table>
       </div>
+      {errorModalIsOpen ? (
+        <Modal
+          className="popup-for-payment"
+          isOpen={setErrorModalIsOpen}
+          onRequestClose={() => setErrorModalIsOpen(false)}
+          contentLabel="Error Modal"
+        >
+          <table>
+            <thead>
+              <tr>
+                <th>Receiver Address</th>
+                <th>Amount</th>
+              </tr>
+            </thead>
+            <tbody>
+              {data.map((item, index) => (
+                <tr key={index}>
+                  <td>{item.receiverAddress}</td>
+                  <td>{item.amount}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </Modal>
+      ) : null}
     </div>
   );
 }

@@ -143,7 +143,7 @@ function Createlist() {
           return sum + (item.gasFees || 0);
         }, 0);
         console.log("Total gas fees required:", totalGasFees);
-        setAlertMessage(`Total gas fees required:" ${totalGasFees}`);
+        setAlertMessage(`Total gas fees required: ${totalGasFees}`);
         setErrorModalIsOpen(true);
 
         // get total token amount
