@@ -62,4 +62,11 @@
     left: 10px;
     top: 16px;
   }
+  .hidden {
+    display: none;
+  }
+
+  .visible {
+    display: block;
+  }
 }

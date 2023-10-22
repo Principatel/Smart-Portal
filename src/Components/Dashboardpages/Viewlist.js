@@ -8,17 +8,29 @@ import { decode } from "../../Helpers/DecodePayload";
 function Viewlist() {
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredTransactions, setFilteredTransactions] = useState([]);
+  const [transactionDetails, setTransactionDetails] = useState([]);
+
   const handleSearch = () => {
-    const filtered = transactions.filter((transaction) =>
-      transaction.receiverAddress
-        .toLowerCase()
-        .includes(searchQuery.toLowerCase())
+    const filtered = transactionDetails.filter(
+      (transaction) =>
+        transaction.ChainName.toLowerCase().includes(
+          searchQuery.toLowerCase()
+        ) ||
+        transaction.TokenSymbol.toLowerCase().includes(
+          searchQuery.toLowerCase()
+        )
     );
     setFilteredTransactions(filtered);
   };
 
   const handleInputChange = (e) => {
     setSearchQuery(e.target.value);
+  };
+
+  const handleExpandClick = (index) => {
+    const updatedTransactions = [...filteredTransactions];
+    updatedTransactions[index].expanded = !updatedTransactions[index].expanded;
+    setFilteredTransactions(updatedTransactions);
   };
 
   const fetchTransaction = async () => {
@@ -48,112 +60,112 @@ function Viewlist() {
           allTransactions.data[i]["call"]["logIndex"],
         TimeTaken: `${minutes} minutes ${seconds} seconds`,
         TotaTokenAmount: allTransactions.data[i]["amount"],
-        TimeExecuted:
-          allTransactions.data[i]["call"]["returnValues"]["block_timestamp"],
+        TimeExecuted: new Date(
+          allTransactions.data[i]["call"]["block_timestamp"] * 1000
+        ).toLocaleString("en-US", {
+          timeZone: "Asia/Kolkata", // IST time zone
+          hour12: false,
+        }),
+        expanded: false, // Initially, details are not expanded
       };
 
       details.push(newTransaction);
     }
-
+    setTransactionDetails(details);
     console.log(details);
   };
 
-  const transactions = [
-    {
-      receiverAddress: "0x5A819d4b53C1f7E0FBBbf48936E92D0a55D073C2",
-      tokenAmount: "420",
-      tokenSymbol: "LINK",
-      chainId: "8",
-      hash: "https://example.com/hash8",
-    },
-    {
-      receiverAddress: "0x2cA01Fb9fB93D56E5916e9e27cE4A3A8473EbCEa",
-      tokenAmount: "750",
-      tokenSymbol: "ADA",
-      chainId: "5",
-      hash: "https://example.com/hash9",
-    },
-    {
-      receiverAddress: "0xE1f78b4871540D6aC17C6b38eA40dCcAdD3B447A",
-      tokenAmount: "120",
-      tokenSymbol: "BTC",
-      chainId: "2",
-      hash: "https://example.com/hash10",
-    },
-    {
-      receiverAddress: "0xFbB3A7AC13B99FAD13b26F8C1f6A2480f0e67F5e",
-      tokenAmount: "300",
-      tokenSymbol: "ETH",
-      chainId: "1",
-      hash: "https://example.com/hash11",
-    },
-    {
-      receiverAddress: "0x2cA01Fb9fB93D56E5916e9e27cE4A3A8473EbCEa",
-      tokenAmount: "900",
-      tokenSymbol: "BNB",
-      chainId: "6",
-      hash: "https://example.com/hash12",
-    },
-  ];
-
   useEffect(() => {
     handleSearch();
-  }, [searchQuery]);
+  }, [searchQuery, transactionDetails]);
+
+  useEffect(() => {
+    fetchTransaction();
+  }, []);
 
   return (
     <div>
       <div className="title-view-history">
         <h1>View Your Transactions</h1>
       </div>
-      <div className="div-to-view-all-transaction">
-        <div className="div-for-search-bar">
-          <div className="search-bar">
-            <div className="search-input-container">
-              <FontAwesomeIcon icon={faSearch} className="search-icon" />
-              <input
-                type="text"
-                className="search-bar-view"
-                placeholder="Search for 0xf4g5df..."
-                value={searchQuery}
-                onChange={handleInputChange}
-              />
-            </div>
+      <div className="div-for-search-bar">
+        <div className="search-bar">
+          <div className="search-input-container">
+            <FontAwesomeIcon icon={faSearch} className="search-icon" />
+            <input
+              type="text"
+              className="search-bar-view"
+              placeholder="Search for Chain or Token"
+              value={searchQuery}
+              onChange={handleInputChange}
+            />
           </div>
         </div>
-        <div className="div-to-display-all-txs">
-          <table>
-            <thead>
-              <tr>
-                <th>Receiver Address</th>
-                <th>Token Amount</th>
-                <th>Token Symbol</th>
-                <th>Chain ID</th>
-                <th>Hash</th>
-              </tr>
-            </thead>
-            <tbody style={{ maxHeight: "300px", overflowY: "auto" }}>
-              {filteredTransactions.map((transaction, index) => (
-                <tr key={index}>
-                  <td>{transaction.receiverAddress}</td>
-                  <td>{transaction.tokenAmount}</td>
-                  <td>{transaction.tokenSymbol}</td>
-                  <td>{transaction.chainId}</td>
-                  <td>
-                    <a
-                      href={transaction.hash}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {transaction.hash}
-                    </a>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
       </div>
-      <button onClick={() => fetchTransaction()}>get transaction</button>
+      <div className="div-to-display-all-txs">
+        <table>
+          <thead>
+            <tr>
+              <th>Chain</th>
+              <th>Token Symbol</th>
+              <th>Total Amount</th>
+              <th>Transfer date</th>
+              <th>Time Taken</th>
+              <th>Current Status</th>
+              <th>Hash</th>
+            </tr>
+          </thead>
+          <tbody style={{ maxHeight: "300px", overflowY: "auto" }}>
+            {filteredTransactions.map((transaction, index) => (
+              <tr key={index}>
+                <td>{transaction.ChainName}</td>
+                <td>{transaction.TokenSymbol}</td>
+                <td>{transaction.TotaTokenAmount}</td>
+                <td>{transaction.TimeExecuted}</td>
+                <td>{transaction.TimeTaken}</td>
+                <td>{transaction.Status}</td>
+                <td>
+                  <a
+                    href={
+                      "https://testnet.axelarscan.io/gmp/" +
+                      transaction.TransactionHash
+                    }
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {"Click Me!!"}
+                  </a>
+                </td>
+                <td>
+                  <button onClick={() => handleExpandClick(index)}>
+                    {transaction.expanded ? "Hide Details" : "Show Details"}
+                  </button>
+                  {transaction.expanded && (
+                    <div>
+                      <p>Receiver Address:</p>
+                      <ul>
+                        {transaction.ReceiverAddress.map(
+                          (receiver, receiverIndex) => (
+                            <li key={receiverIndex}>{receiver}</li>
+                          )
+                        )}
+                      </ul>
+                      <p>Token Amounts:</p>
+                      <ul>
+                        {transaction.TokenAmount.map((amount, amountIndex) => (
+                          <li key={amountIndex}>
+                            {(amount / 1000000).toString()}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
