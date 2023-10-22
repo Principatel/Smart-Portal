@@ -113,6 +113,7 @@ function Viewlist() {
               <th>Time Taken</th>
               <th>Current Status</th>
               <th>Hash</th>
+              <th>View Details</th>
             </tr>
           </thead>
           <tbody style={{ maxHeight: "300px", overflowY: "auto" }}>
@@ -150,7 +151,7 @@ function Viewlist() {
                           )
                         )}
                       </ul>
-                      <p>Token Amounts:</p>
+                      <p>Token Amount:</p>
                       <ul>
                         {transaction.TokenAmount.map((amount, amountIndex) => (
                           <li key={amountIndex}>

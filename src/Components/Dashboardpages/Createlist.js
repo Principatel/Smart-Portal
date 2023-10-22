@@ -16,6 +16,7 @@ function Createlist() {
   const [tokenSymbolFinal, setTokenSymbol] = useState("aUSDC");
   const [errorModalIsOpen, setErrorModalIsOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [alertMessage, setAlertMessage] = useState("");
   const [formData, setFormData] = useState({
     receiverAddress: "",
     tokenAmount: "",
@@ -33,12 +34,13 @@ function Createlist() {
     );
     console.log("user balance:", userTokenBalance);
     console.log("token to transfer:", totalTokenAmount);
-
+    console.log(totalTokenAmount);
     if (userTokenBalance < totalTokenAmount) {
       setErrorMessage(
         `Token exceeded.You don't have enough Token, your ${tokenSymbolFinal} balance is ${userTokenBalance} ${tokenSymbolFinal} and your total transfer amount is ${totalTokenAmount} ${tokenSymbolFinal}`
       );
       setErrorModalIsOpen(true);
+
       return false;
     } else {
       return true;
@@ -141,6 +143,8 @@ function Createlist() {
           return sum + (item.gasFees || 0);
         }, 0);
         console.log("Total gas fees required:", totalGasFees);
+        setAlertMessage(`Total gas fees required:" ${totalGasFees}`);
+        setErrorModalIsOpen(true);
 
         // get total token amount
         const totalTokenAmount = groupedData.reduce((sum, group) => {
@@ -289,11 +293,23 @@ function Createlist() {
         onRequestClose={() => setErrorModalIsOpen(false)}
         contentLabel="Error Modal"
       >
-        <h2>Error</h2>
-        <p>{errorMessage}</p>
-        <div className="div-to-center">
-          <button onClick={() => setErrorModalIsOpen(false)}>Close</button>
-        </div>
+        {errorMessage ? (
+          <>
+            <h2>Error</h2>
+            <p>{errorMessage}</p>
+            <div className="div-to-center">
+              <button onClick={() => setErrorModalIsOpen(false)}>Close</button>
+            </div>
+          </>
+        ) : (
+          <>
+            <h2>Notice</h2>
+            <p>{alertMessage}</p>
+            <div className="div-to-center">
+              <button onClick={() => setErrorModalIsOpen(false)}>Close</button>
+            </div>
+          </>
+        )}
       </Modal>
     </div>
   );
