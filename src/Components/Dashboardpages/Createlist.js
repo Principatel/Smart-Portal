@@ -6,7 +6,7 @@ import { getTokenBalance } from "../../Helpers/TokenBalance";
 import { getGasFees } from "../../Helpers/getGasEstimation";
 import { approveToken } from "../../Helpers/ApproveToken";
 import tokensContractAddress from "../../Helpers/GetTokenContractAddress.json";
-
+import Modal from "react-modal";
 import { ethers } from "ethers";
 import { useAccount, useSigner } from "wagmi";
 
@@ -14,11 +14,34 @@ function Createlist() {
   const { address, isConnected } = useAccount();
   const [listData, setListData] = useState([]);
   const [tokenSymbolFinal, setTokenSymbol] = useState("aUSDC");
+  const [errorModalIsOpen, setErrorModalIsOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const [formData, setFormData] = useState({
     receiverAddress: "",
     tokenAmount: "",
     chainName: "Polygon",
   });
+
+  const tokenBalance = async (totalTokenAmount) => {
+    const balance = await getTokenBalance(
+      address,
+      tokensContractAddress[tokenSymbolFinal]
+    );
+    const userTokenBalance = Math.floor(
+      (Number(balance._hex) / 1e6).toFixed(6),
+      2
+    );
+
+    if (userTokenBalance < totalTokenAmount) {
+      setErrorMessage(
+        `Token exceeded. You don't have enough Token. Your aUSDC balance is ${userTokenBalance} aUSDC, and your total transfer amount is ${totalTokenAmount} aUSDC`
+      );
+      setErrorModalIsOpen(true);
+      return false;
+    } else {
+      return true;
+    }
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -93,42 +116,44 @@ function Createlist() {
     return groupedDataArray;
   }
 
-  const tokenBalance = async (totalTokenAmount) => {
-    const balance = await getTokenBalance(
-      address,
-      tokensContractAddress[tokenSymbolFinal]
-    );
-    const userTokenBalance = Math.floor(
-      (Number(balance._hex) / 1e6).toFixed(6),
-      2
-    );
-    console.log("user balance:", userTokenBalance);
-    console.log("token to transfer:", totalTokenAmount);
-    if (userTokenBalance < totalTokenAmount) {
-      alert(
-        `Token exceeded.You don't have enough Token, you aUSDC balance is ${userTokenBalance} aUSDC and your total transfer amount is ${totalTokenAmount} aUSDC`
-      );
-      return false;
-    } else {
-      return true;
-    }
-  };
+  // const tokenBalance = async (totalTokenAmount) => {
+  //   const balance = await getTokenBalance(
+  //     address,
+  //     tokensContractAddress[tokenSymbolFinal]
+  //   );
+  //   const userTokenBalance = Math.floor(
+  //     (Number(balance._hex) / 1e6).toFixed(6),
+  //     2
+  //   );
+  //   console.log("user balance:", userTokenBalance);
+  //   console.log("token to transfer:", totalTokenAmount);
+  //   if (userTokenBalance < totalTokenAmount) {
+  //     alert(
+  //       `Token exceeded.You don't have enough Token, you aUSDC balance is ${userTokenBalance} aUSDC and your total transfer amount is ${totalTokenAmount} aUSDC`
+  //     );
+  //     return false;
+  //   } else {
+  //     return true;
+  //   }
+  // };
 
   // Main function to do the Contract Call
   const executeTransaction = async () => {
+    let userTokenBalance; // Define userTokenBalance here
+
     console.log("list of data received from the form:", listData);
 
     processListData(listData)
       .then(async (groupedData) => {
         console.log("Processed data for smart contract:", groupedData);
 
-        //get total gas fees
+        // get total gas fees
         const totalGasFees = groupedData.reduce((sum, item) => {
           return sum + (item.gasFees || 0);
         }, 0);
         console.log("Total gas fees required:", totalGasFees);
 
-        //get total token amount
+        // get total token amount
         const totalTokenAmount = groupedData.reduce((sum, group) => {
           const groupTotal = group.amounts.reduce((acc, amount) => {
             // Convert BigNumber to decimal with six decimal places
@@ -138,9 +163,9 @@ function Createlist() {
           return sum + groupTotal;
         }, 0);
 
-        const procced = await tokenBalance(totalTokenAmount);
+        userTokenBalance = await tokenBalance(totalTokenAmount); // Assign the value here
 
-        if (procced) {
+        if (userTokenBalance) {
           console.log("Proceeding for approval....");
           await approveToken(
             totalTokenAmount.toString(),
@@ -153,6 +178,11 @@ function Createlist() {
 
           // const receipt = await txsendPayment.wait();
           // console.log("Transaction receipt:", receipt);
+        } else {
+          // Display the message in the popup
+          const message = `Token exceeded. You don't have enough Token, your ${tokenSymbolFinal} balance is ${userTokenBalance} ${tokenSymbolFinal} and your total transfer amount is ${totalTokenAmount} ${tokenSymbolFinal}`;
+          setErrorMessage(message);
+          setErrorModalIsOpen(true);
         }
       })
       .catch((error) => {
@@ -162,22 +192,11 @@ function Createlist() {
 
   return (
     <div>
-      Select Token
-      <select
-        className="each-input-of-create-list"
-        name="tokenSymbol"
-        value={tokenSymbolFinal}
-        onChange={(e) => {
-          setTokenSymbol(e.target.value);
-        }}
+      <div
+        className={`user-form-for-list ${
+          errorModalIsOpen ? "blurred-background" : ""
+        }`}
       >
-        <option value="aUSDC">aUSDC</option>
-        <option value="axlWETH">axlWETH</option>
-        <option value="wAXL">wAXL</option>
-        <option value="WMATIC">WMATIC</option>
-        <option value="WDEV">WDEV</option>
-      </select>
-      <div className="user-form-for-list">
         <input
           className="each-input-of-create-list"
           type="text"
@@ -212,10 +231,30 @@ function Createlist() {
         /> */}
         <select
           className="each-input-of-create-list"
+          name="tokenSymbol"
+          value={tokenSymbolFinal}
+          onChange={(e) => {
+            setTokenSymbol(e.target.value);
+          }}
+        >
+          <option value="" disabled selected>
+            Select Token
+          </option>
+          <option value="aUSDC">aUSDC</option>
+          <option value="axlWETH">axlWETH</option>
+          <option value="wAXL">wAXL</option>
+          <option value="WMATIC">WMATIC</option>
+          <option value="WDEV">WDEV</option>
+        </select>
+        <select
+          className="each-input-of-create-list"
           name="chainName"
           value={formData.chainName}
           onChange={handleInputChange}
         >
+          <option value="" disabled selected>
+            Select Chain
+          </option>
           <option value="Polygon">Polygon</option>
           <option value="ethereum-2">Ethereum</option>
           <option value="Avalanche">Avalanche</option>
@@ -249,7 +288,10 @@ function Createlist() {
                       <td>{tokenSymbolFinal}</td>
                       <td>{data.chainName}</td>
                       <td>
-                        <button onClick={() => handleDeleteRow(index)}>
+                        <button
+                          className="delete-button"
+                          onClick={() => handleDeleteRow(index)}
+                        >
                           Delete
                         </button>
                       </td>
@@ -271,6 +313,18 @@ function Createlist() {
           <h3>Your Transactions list will be listed here!!</h3>
         )}
       </div>
+      <Modal
+        className="popup-for-payment"
+        isOpen={errorModalIsOpen}
+        onRequestClose={() => setErrorModalIsOpen(false)}
+        contentLabel="Error Modal"
+      >
+        <h2>Error</h2>
+        <p>{errorMessage}</p>
+        <div className="div-to-center">
+          <button onClick={() => setErrorModalIsOpen(false)}>Close</button>
+        </div>
+      </Modal>
     </div>
   );
 }

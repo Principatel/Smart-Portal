@@ -3,6 +3,10 @@
   padding: 5px 0px;
 }
 
+.user-form-for-list option {
+  color: black;
+}
+
 .div-to-add-the-tx {
   border: 1px solid red;
   margin: 10px 0px;
@@ -44,6 +48,20 @@
   margin-left: 20px;
 }
 
+.delete-button:hover {
+  cursor: pointer;
+  background-color: rgba(0, 213, 255, 0.187);
+}
+
+.delete-button {
+  padding: 10px 25px;
+  background-color: transparent;
+  color: white;
+  border: 1px solid rgb(14, 163, 200);
+  border-radius: 15px;
+  margin-left: 20px;
+}
+
 .div-to-add-the-tx {
   box-shadow: rgba(23, 161, 192, 0.16) 0px 3px 6px,
     rgba(15, 131, 139, 0.23) 0px 3px 6px;
@@ -53,7 +71,7 @@
   display: flex;
   border-radius: 10px;
   flex-direction: column;
-  padding: 0px 10px;
+  padding: 10px 10px;
 }
 
 .scrollable-table {
@@ -68,6 +86,7 @@ table {
 }
 
 table th {
+  text-align: center;
   background-color: #0feeee7a;
   /* border: 1px solid #ddd; */
   padding: 10px;
@@ -101,12 +120,12 @@ table tbody tr:nth-child(even) {
 }
 
 .scrollable-table::-webkit-scrollbar-thumb {
-  background: #0feeee7a; /* Blue color for the scrollbar thumb */
+  background: #95e0137a; /* Blue color for the scrollbar thumb */
   border-radius: 5px; /* Round corners for the scrollbar thumb */
 }
 
 .scrollable-table::-webkit-scrollbar-thumb:hover {
-  background: #0feeee; /* Change color on hover */
+  background: #0f0fa6; /* Change color on hover */
 }
 
 .scrollable-table-container {
@@ -115,6 +134,7 @@ table tbody tr:nth-child(even) {
 }
 
 .send-button:hover {
+  cursor: pointer;
   background-color: rgba(20, 187, 216, 0.304);
   box-shadow: rgba(16, 162, 206, 0.12) 0px 2px 4px 0px,
     rgba(12, 156, 218, 0.32) 0px 2px 16px 0px;
@@ -126,6 +146,7 @@ table tbody tr:nth-child(even) {
   font-family: Almarai;
   font-size: 15px;
   font-weight: 700;
+  width: max-content;
   line-height: 37px;
   letter-spacing: 0.085em;
   text-align: center;
@@ -136,6 +157,53 @@ table tbody tr:nth-child(even) {
   border-radius: 25px;
   /* margin-top: 10px; */
 }
+
+/* Add your existing styles here */
+
+/* Styles for the blurred background when the popup is open */
+.blurred-background {
+  filter: blur(1px);
+}
+
+/* Styles for the popup */
+.popup-for-payment {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgb(102, 3, 159);
+  padding: 20px;
+  border-radius: 30px;
+  color: white;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  z-index: 9999;
+}
+
+/* Centering the error message in the popup */
+.popup-for-payment h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Styling the close button in the popup */
+.popup-for-payment button {
+  background: transparent;
+
+  color: white;
+  padding: 10px 20px;
+  border: 1px solid white;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.div-to-center {
+  display: flex;
+  justify-content: center;
+}
+
+/* Additional custom styles for your form elements and transaction list */
+/* Add your custom styles here */
 
 /* Default styles */
 
