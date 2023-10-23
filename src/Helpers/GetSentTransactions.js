@@ -5,7 +5,7 @@ export const getSentTransaction = async (address) => {
     // Define the parameters
     const parameters = {
       method: "searchGMP",
-      size: 5,
+      size: 20,
       senderAddress: "0xe57f4c84539a6414C4Cf48f135210e01c477EFE0",
       sourceContractAddress: "0x05c106CaD72b04c09F228286fEd949eC6f9539a7",
     };

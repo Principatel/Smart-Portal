@@ -298,6 +298,11 @@ function Csvlist() {
           )}
         </div>
       </div>
+      <div>
+        <a href="/Book1.csv" download="Book1.csv">
+          Download sample CSV file
+        </a>
+      </div>
       <Modal
         className="popup-for-payment"
         isOpen={errorModalIsOpen}

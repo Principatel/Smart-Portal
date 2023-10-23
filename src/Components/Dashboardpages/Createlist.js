@@ -292,6 +292,7 @@ function Createlist() {
           <h3>Your Transactions list will be listed here!!</h3>
         )}
       </div>
+
       <Modal
         className="popup-for-payment"
         isOpen={errorModalIsOpen}
