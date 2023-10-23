@@ -5,6 +5,7 @@ import "../../Styles/dashboard/viewlist.css";
 import { getSentTransaction } from "../../Helpers/GetSentTransactions";
 import { decode } from "../../Helpers/DecodePayload";
 import Modal from "react-modal";
+import { useAccount, useSigner } from "wagmi";
 
 function Viewlist() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -12,6 +13,7 @@ function Viewlist() {
   const [transactionDetails, setTransactionDetails] = useState([]);
   const [errorModalIsOpen, setErrorModalIsOpen] = useState(false);
   const [data, setData] = useState();
+  const { address, isConnected } = useAccount();
 
   const handleSearch = () => {
     const filtered = transactionDetails.filter(
@@ -44,7 +46,7 @@ function Viewlist() {
   };
 
   const fetchTransaction = async () => {
-    const [allTransactions] = await Promise.all([getSentTransaction()]);
+    const [allTransactions] = await Promise.all([getSentTransaction(address)]);
     console.log(allTransactions.data[0]["call"]["returnValues"]["payload"]);
     const details = [];
 
