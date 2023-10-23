@@ -17,6 +17,7 @@ function Createlist() {
   const [errorModalIsOpen, setErrorModalIsOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [alertMessage, setAlertMessage] = useState("");
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     receiverAddress: "",
     tokenAmount: "",
@@ -126,7 +127,7 @@ function Createlist() {
   // Main function to do the Contract Call
   const executeTransaction = async () => {
     let userTokenBalance; // Define userTokenBalance here
-
+    setLoading(true);
     console.log("list of data received from the form:", listData);
     if (listData.length === 0) {
       setErrorMessage(`Please enter necessary details`);
@@ -143,8 +144,6 @@ function Createlist() {
           return sum + (item.gasFees || 0);
         }, 0);
         console.log("Total gas fees required:", totalGasFees);
-        setAlertMessage(`Total gas fees required: ${totalGasFees}`);
-        setErrorModalIsOpen(true);
 
         // get total token amount
         const totalTokenAmount = groupedData.reduce((sum, group) => {
@@ -160,20 +159,25 @@ function Createlist() {
 
         if (userTokenBalance) {
           console.log("Proceeding for approval....");
-          await approveToken(
+          const isTokenApproved = await approveToken(
             totalTokenAmount.toString(),
             tokensContractAddress[tokenSymbolFinal]
           );
-          // const con = await crossSendInstance();
-          // const txsendPayment = await con.sendPayment(groupedData, {
-          //   value: totalGasFees,
-          // });
+          if (isTokenApproved) {
+            const con = await crossSendInstance();
+            const txsendPayment = await con.sendPayment(groupedData, {
+              value: totalGasFees,
+            });
 
-          // const receipt = await txsendPayment.wait();
-          // console.log("Transaction receipt:", receipt);
+            const receipt = await txsendPayment.wait();
+            setLoading(false);
+            console.log("Transaction receipt:", receipt);
+          }
         }
+        setLoading(false);
       })
       .catch((error) => {
+        setLoading(false);
         console.error(error);
       });
   };
@@ -181,7 +185,7 @@ function Createlist() {
   return (
     <div>
       <select
-        className="each-input-of-create-list"
+        className="custom-select"
         name="tokenSymbol"
         value={tokenSymbolFinal}
         onChange={(e) => {
@@ -279,8 +283,9 @@ function Createlist() {
               onClick={() => {
                 executeTransaction();
               }}
+              disabled={loading}
             >
-              Begin Payment
+              {loading ? <div className="loader"></div> : "Begin Payment"}
             </button>
           </div>
         ) : (

@@ -18,6 +18,7 @@ function Csvlist() {
   const [errorModalIsOpen, setErrorModalIsOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [tokenSymbolFinal, setTokenSymbol] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const parseCSV = (content) => {
     const rows = content.split("\n");
@@ -158,6 +159,7 @@ function Csvlist() {
 
   const executeTransaction = async () => {
     let userTokenBalance; // Define userTokenBalance here
+    setLoading(true);
 
     console.log("list of data received from the form:", listData);
     if (listData.length === 0) {
@@ -190,24 +192,22 @@ function Csvlist() {
 
         if (userTokenBalance) {
           console.log("Proceeding for approval....");
-          await approveToken(
+          const isTokenApproved = await approveToken(
             totalTokenAmount.toString(),
             tokensContractAddress[tokenSymbolFinal]
           );
-          // const con = await crossSendInstance();
-          // const txsendPayment = await con.sendPayment(groupedData, {
-          //   value: totalGasFees,
-          // });
+          if (isTokenApproved) {
+            const con = await crossSendInstance();
+            const txsendPayment = await con.sendPayment(groupedData, {
+              value: totalGasFees,
+            });
 
-          // const receipt = await txsendPayment.wait();
-          // console.log("Transaction receipt:", receipt);
-        } else {
-          console.log("nahi ho paega");
-          // Display the message in the popup
-          // const message = `Token exceeded. You don't have enough Token, your ${tokenSymbolFinal} balance is ${userTokenBalance} ${tokenSymbolFinal} and your total transfer amount is ${totalTokenAmount} ${tokenSymbolFinal}`;
-          // setErrorMessage(message);
-          // setErrorModalIsOpen(true);
+            const receipt = await txsendPayment.wait();
+            setLoading(false);
+            console.log("Transaction receipt:", receipt);
+          }
         }
+        setLoading(false);
       })
       .catch((error) => {
         console.error(error);
@@ -291,8 +291,9 @@ function Csvlist() {
               onClick={() => {
                 executeTransaction();
               }}
+              disabled={loading}
             >
-              Begin Payment
+              {loading ? <div className="loader"></div> : "Begin Payment"}
             </button>
           )}
         </div>
