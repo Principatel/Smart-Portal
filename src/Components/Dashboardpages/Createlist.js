@@ -292,7 +292,11 @@ function Createlist() {
           <h3>Your Transactions list will be listed here!!</h3>
         )}
       </div>
-
+      <div>
+        <a href="/Getting%20aUSDC.pdf" target="_blank">
+          Steps to Get aUSDC
+        </a>
+      </div>
       <Modal
         className="popup-for-payment"
         isOpen={errorModalIsOpen}
